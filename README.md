@@ -18,9 +18,8 @@ Kiểm thử đơn vị rất quan trọng vì các nhà phát triển phần m�
    <p>2: Thiết kế unit test?</p>
    <p>3: các test cơ bản?</p>
    <p>4: Thiết lập dự án</p>
-   <p>5: kết luận 
+   <p>5: kết luận </p>
    </td>
-   
    </tbody>
    </table>
 </div>
