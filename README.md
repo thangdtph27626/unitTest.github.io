@@ -57,42 +57,196 @@ Kiểm thử đơn vị rất quan trọng vì các nhà phát triển phần m�
         </dependency>
 ```
 
-### Adding private contributions count to total commits count
-
-You can add the count of all your private contributions to the total commits count by using the query parameter `&count_private=true`.
-
-_Note: If you are deploying this project yourself, the private contributions will be counted by default. Otherwise, you need to choose to share your private contribution counts._
-
-> Options: `&count_private=true`
-```md
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&count_private=true)
-```
-
-### Showing icons
-
-To enable icons, you can pass `show_icons=true` in the query param, like so:
+## Tạo lớp sinh viên
 
 ```md
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&show_icons=true)
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Table
+@Entity
+public class SinhVien {
+
+    @Id
+    private String id;
+    private String name;
+    private String email;
+
+}
+
 ```
 
-### Themes
+##Service
 
-With inbuilt themes, you can customize the look of the card without doing any [manual customization](#customization).
+> service
+```
+public interface SinhVienService {
 
-Use `&theme=THEME_NAME` parameter like so :-
+    List<SinhVien> getList();
+
+    SinhVien addNew(SinhVien sinhVien);
+
+    boolean delete(String id);
+
+    SinhVien update(String id, SinhVien sinhVien);
+
+    SinhVien findById(String id);
+}
+
+```
+
+> impl
+```
+@AllArgsConstructor
+@Service
+public class SinhVienSericeImpl implements SinhVienService{
+
+    private final SinhVienRepository sinhVienRepository;
+
+    @Override
+    public List<SinhVien> getList() {
+        return sinhVienRepository.findAll();
+    }
+
+    @Override
+    public SinhVien addNew(SinhVien sinhVien) {
+        if(sinhVienRepository.selectExistsEmail(sinhVien.getEmail()) == 0){
+            throw  new IllegalArgumentException("email da ton tai");
+        }
+        System.out.println(sinhVienRepository.selectExistsEmail(sinhVien.getEmail()));
+        return sinhVienRepository.save(sinhVien);
+    }
+
+    @Override
+    public boolean delete(String id) {
+        Optional<SinhVien> sinhVien = sinhVienRepository.findById(id);
+        if (sinhVien.isPresent()) {
+            sinhVienRepository.deleteById(id);
+            return true;
+        }else{
+            throw  new IllegalArgumentException("id not exists");
+        }
+    }
+
+    @Override
+    public SinhVien update(String id, SinhVien sinhVien) {
+        SinhVien updateSinhVien = sinhVienRepository.findById(id).orElse(null);
+        if(updateSinhVien == null){
+            throw  new IllegalArgumentException("id not exists");
+        }
+        if(sinhVienRepository.selectExistsEmail(sinhVien.getEmail()) == 0){
+            throw  new IllegalArgumentException("email da ton tai");
+        }
+        updateSinhVien.setId(sinhVien.getId());
+        updateSinhVien.setName(sinhVien.getName());
+        updateSinhVien.setEmail(sinhVien.getEmail());
+        return sinhVienRepository.save(updateSinhVien);
+    }
+
+    @Override
+    public SinhVien findById(String id) {
+        return sinhVienRepository.findById(id).orElse(null);
+    }
+}
+
+```
+
+## Controller
 
 ```md
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&show_icons=true&theme=radical)
+@RestController
+public class sinhVienController {
+
+    @Autowired()
+    private SinhVienService sinhVienService;
+
+    @PostMapping()
+    public SinhVien addNew(@RequestBody SinhVien sinhVien){
+        return sinhVienService.addNew(sinhVien);
+    }
+
+    @GetMapping("/{id}")
+    public SinhVien DetailSinhVien(@PathVariable("id") String id){
+        SinhVien sinhVien = null;
+        try {
+            sinhVien = sinhVienService.findById(id);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return sinhVien;
+    }
+
+    @PutMapping("/{id}")
+    public SinhVien update(@PathVariable("id") String id, @RequestBody SinhVien sinhVienRequest) {
+        return sinhVienService.update(id, sinhVienRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    public boolean delete(@PathVariable("id") String id){
+        return sinhVienService.delete(id);
+    }
+
+    @GetMapping()
+    public List<SinhVien> listSinhVien(){
+        List<SinhVien> list = sinhVienService.getList();
+        return list;
+    }
+
+}
 ```
 
-#### All inbuilt themes:-
+## Khởi tạo lớp chứa các test case 
 
-dark, radical, merko, gruvbox, tokyonight, onedark, cobalt, synthwave, highcontrast, dracula
+```
+class sinhVienControllerTest {
 
-<img src="https://res.cloudinary.com/anuraghazra/image/upload/v1595174536/grs-themes_l4ynja.png" alt="GitHub Readme Stats Themes" width="600px"/>
+    @Autowired
+    private MockMvc mvc;
 
-You can look at a preview for [all available themes](./themes/README.md) or checkout the [theme config file](./themes/index.js) & **you can also contribute new themes** if you like :D
+    @Test
+    void addNew() {
+    }
+
+    @Test
+    void detailSinhVien() {
+    }
+
+    @Test
+    void update() {
+    }
+
+    @Test
+    void delete() {
+    }
+
+    @Test
+    void listSinhVien() {
+    }
+
+    @Test
+    void testAddNew() {
+    }
+
+    @Test
+    void detailSinhVien() {
+    }
+
+    @Test
+    void testUpdate() {
+    }
+
+    @Test
+    void testDelete() {
+    }
+
+    @Test
+    void testListSinhVien() {
+    }
+}
+```
+
 
 ### Customization
 
