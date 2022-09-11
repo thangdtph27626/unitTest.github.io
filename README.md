@@ -200,8 +200,15 @@ public class sinhVienController {
 ## Khởi tạo lớp chứa các test case 
 
 ```
+@RunWith(MockitoJUnitRunner.class)
 class sinhVienControllerTest {
 
+    @MockBean
+    private SinhVienRepository sinhVienRepository;
+    
+     @InjectMocks
+    private SinhVienController sinhVienController ;
+    
     @Autowired
     private MockMvc mvc;
 
@@ -246,6 +253,9 @@ class sinhVienControllerTest {
     }
 }
 ```
+
+-@RunWith (SpringRunner.class) cung cấp cầu nối giữa các tính năng kiểm tra Spring Boot và JUnit. Bất cứ khi nào chúng ta sử dụng bất kỳ tính năng kiểm tra Spring Boot nào trong các bài kiểm tra JUnit , chú thích này sẽ được yêu cầu.
+
 
 
 ### Customization
