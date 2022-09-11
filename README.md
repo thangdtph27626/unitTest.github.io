@@ -305,11 +305,11 @@ class sinhVienControllerTest {
 ```
 
 
--@RunWith (SpringRunner.class) cung cấp cầu nối giữa các tính năng kiểm tra Spring Boot và JUnit. Bất cứ khi nào chúng ta sử dụng bất kỳ tính năng kiểm tra Spring Boot nào trong các bài kiểm tra JUnit , chú thích này sẽ được yêu cầu.
--@InjectMocks tạo một thể hiện của lớp và đưa các mô phỏng được tạo bằng chú thích @Mock vào thể hiện này
--@Mock giúp là cách viết tắt của phương thức Mockito.mock () , giúp bạn bạn dễ dàng tìm thấy mô phỏng vấn đề trong trường hợp bị lỗi, vì tên của trường xuất hiện trong thông báo lỗi
--MockMvc là một lớp công cụ kiểm tra Spring Boot cho phép bạn kiểm tra các test case mà không cần khởi động máy chủ HTTP
--AutoCloseable là một interface đảm bảo rằng các tài nguyên được tự động giải phóng
+- @RunWith (SpringRunner.class) cung cấp cầu nối giữa các tính năng kiểm tra Spring Boot và JUnit. Bất cứ khi nào chúng ta sử dụng bất kỳ tính năng kiểm tra Spring Boot nào trong các bài kiểm tra JUnit , chú thích này sẽ được yêu cầu.\
+- @InjectMocks tạo một thể hiện của lớp và đưa các mô phỏng được tạo bằng chú thích @Mock vào thể hiện này\
+- @Mock giúp là cách viết tắt của phương thức Mockito.mock () , giúp bạn bạn dễ dàng tìm thấy mô phỏng vấn đề trong trường hợp bị lỗi, vì tên của trường xuất hiện trong thông báo lỗi\
+- MockMvc là một lớp công cụ kiểm tra Spring Boot cho phép bạn kiểm tra các test case mà không cần khởi động máy chủ HTTP\
+- AutoCloseable là một interface đảm bảo rằng các tài nguyên được tự động giải phóng\
 
 > thực hiện cấu hình test
 
@@ -327,10 +327,10 @@ class sinhVienControllerTest {
     }
 ```
 
--@BeforeEach  thực thi trước mỗi lần gọi phương thức @Test
--@AfterEach sẽ được thực thi sau mỗi  phương thức trong lớp hiện tại.@Test
--MockitoAnnotations.openMocks(this) gọi yêu cầu Mockito quét cá thể lớp thử nghiệm này để tìm bất kỳ trường nào được chú thích bằng @Mockvà khởi tạo các trường đó dưới dạng mô phỏng
--MockMvcBuilders.standaloneSetup() cho phép đăng ký một hoặc nhiều controller mà không cần sử dụng WebApplicationContext đầy đủ
+- @BeforeEach  thực thi trước mỗi lần gọi phương thức @Test\
+- @AfterEach sẽ được thực thi sau mỗi  phương thức trong lớp hiện tại.@Test\
+- MockitoAnnotations.openMocks(this) gọi yêu cầu Mockito quét cá thể lớp thử nghiệm này để tìm bất kỳ trường nào được chú thích bằng @Mockvà khởi tạo các trường đó dưới dạng mô phỏng\
+- MockMvcBuilders.standaloneSetup() cho phép đăng ký một hoặc nhiều controller mà không cần sử dụng WebApplicationContext đầy đủ
 
 ### 1 cung cấp danh sách sinh viên  sau đó trả lại Mảng Json
 
@@ -349,9 +349,9 @@ class sinhVienControllerTest {
     }
 
 ```
--mvc.perform() trả về một kiểu cho phép xâu chuỗi các hành động tiếp theo, chẳng hạn như xác nhận các kỳ vọng, vào kết quả.
--andExpect thực hiện các test case 
--Lời gọi phương thức get (…) có thể được thay thế bằng các phương thức khác tương ứng với các động từ HTTP như put () , post () , v.v. Xin lưu ý rằng chúng tôi cũng đang đặt loại nội dung trong yêu cầu.
+- mvc.perform() trả về một kiểu cho phép xâu chuỗi các hành động tiếp theo, chẳng hạn như xác nhận các kỳ vọng, vào kết quả.\
+- andExpect thực hiện các test case \
+- Lời gọi phương thức get (…) có thể được thay thế bằng các phương thức khác tương ứng với các động từ HTTP như put () , post () , v.v. Xin lưu ý rằng chúng tôi cũng đang đặt loại nội dung trong yêu cầu.\
 
 #### 2 thêm mới sinh viên 
 
@@ -380,7 +380,7 @@ class sinhVienControllerTest {
                 .andExpect(jsonPath("$.name", is("Le van b")));
     }
 ```
--objectWriter.writeValueAsString chuyển đổi chuỗi về ía trị json
+- objectWriter.writeValueAsString chuyển đổi chuỗi về giá trị json
 
 #### 3 test tìm kiếm sinh viên theo tên :
 
