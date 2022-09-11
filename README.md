@@ -38,7 +38,7 @@ Kiểm thử đơn vị rất quan trọng vì các nhà phát triển phần m�
 
 # các test cơ bản 
 
-```
+```md
  int sum(int a, int b){
         if(a < 0 || b < 0){
             throw new IllegalArgumentException(" a > 0 va b > 0");
@@ -93,7 +93,7 @@ xem thêm [tại đây](https://docs.spring.io/spring-framework/docs/current/jav
 
 ## Tạo lớp sinh viên
 
-```
+```mdmd
 @Getter
 @Setter
 @AllArgsConstructor
@@ -116,7 +116,7 @@ public class SinhVien {
 
 > service
 
-```
+`mdmd
 public interface SinhVienService {
 
     List<SinhVien> getList();
@@ -132,7 +132,9 @@ public interface SinhVienService {
 
 ```
 
-> impl
+
+> service  impl
+
 ```
 @Service
 public class SinhVienSericeImpl implements SinhVienService{
@@ -303,6 +305,8 @@ class sinhVienControllerTest {
 -AutoCloseable là một interface đảm bảo rằng các tài nguyên được tự động giải phóng
 
 > thực hiện cấu hình test
+
+
 ```
    @BeforeEach
     public void setup() {
@@ -371,7 +375,7 @@ class sinhVienControllerTest {
 ```
 -objectWriter.writeValueAsString chuyển đổi chuỗi về ía trị json
 
-#### test tìm kiếm sinh viên theo tên :
+#### 3 test tìm kiếm sinh viên theo tên :
 
 ```
  @Test
@@ -388,7 +392,7 @@ class sinhVienControllerTest {
     
 ```
 
-#### test update sinh viên
+#### 4 test update sinh viên
 
 ```
  @Test
