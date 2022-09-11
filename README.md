@@ -16,7 +16,9 @@ Kiểm thử đơn vị rất quan trọng vì các nhà phát triển phần m�
   <td>
    1: Kiểm thử đơn vị là gì?</br>
    2: Thiết kế unit test?</br>
-   3: Thiết lập dự án
+   3: các test cơ bản?</br>
+   4: Thiết lập dự án</br>
+   5: kết luận 
    </td>
    
    </tbody>
@@ -34,7 +36,35 @@ Kiểm thử đơn vị rất quan trọng vì các nhà phát triển phần m�
 > 3.Kiểm tra sự hoạt động đúng đắn của các phương thức.\
 > 4.Dọn dẹp tài nguyên sau khi kết thúc kiểm tra.
 
-# Thiết lập dự án
+# các test cơ bản 
+
+```
+ int sum(int a, int b){
+        if(a < 0 || b < 0){
+            throw new IllegalArgumentException(" a > 0 va b > 0");
+        }
+        return a+ b;
+    }
+
+    @Test
+    void checkSumTwoNumber(){
+         @Test
+    void checkSumTwoNumber(){
+        Assertions.assertThrows(IllegalArgumentException.class, ()->{
+            sum(-5,10);
+        });
+        Assertions.assertEquals(15,sum(5,10));
+    }
+
+    }
+    
+```
+
+-Assertions.assertThrows() xử lí các ngoại lệ 
+-Assertions.assertEquals() kiểm tra kết quả trả về 
+xem thêm [tại đây](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/Assert.html)
+
+# Thiết lập dự án Sping boot
 
 ## Maven Dependencies
 
@@ -99,11 +129,11 @@ public interface SinhVienService {
 
 > impl
 ```
-@AllArgsConstructor
 @Service
 public class SinhVienSericeImpl implements SinhVienService{
 
-    private final SinhVienRepository sinhVienRepository;
+    @Autowired
+    private  SinhVienRepository sinhVienRepository;
 
     @Override
     public List<SinhVien> getList() {
@@ -112,7 +142,7 @@ public class SinhVienSericeImpl implements SinhVienService{
 
     @Override
     public SinhVien addNew(SinhVien sinhVien) {
-        if(sinhVienRepository.selectExistsEmail(sinhVien.getEmail()) == 0){
+        if(sinhVienRepository.selectExistsEmail(sinhVien.getEmail()) != 0){
             throw  new IllegalArgumentException("email da ton tai");
         }
         System.out.println(sinhVienRepository.selectExistsEmail(sinhVien.getEmail()));
@@ -197,14 +227,15 @@ public class sinhVienController {
 }
 ```
 
-## Khởi tạo lớp chứa các test case 
+## test 
+## Khởi tạo các test case 
 
 ```
 @RunWith(MockitoJUnitRunner.class)
 class sinhVienControllerTest {
 
-    @MockBean
-    private SinhVienRepository sinhVienRepository;
+    @Mock
+    private SinhVienService sinhVienService ;
     
      @InjectMocks
     private SinhVienController sinhVienController ;
@@ -212,6 +243,12 @@ class sinhVienControllerTest {
     @Autowired
     private MockMvc mvc;
 
+   // khởi tạo sinh viên 
+   SinhVien sinhVien = new SinhVien("A1","Le Van A", "leVanA@gmail.com");
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectWriter objectWriter = objectMapper.writer();
+    
     @Test
     void addNew() {
     }
@@ -255,299 +292,123 @@ class sinhVienControllerTest {
 ```
 
 -@RunWith (SpringRunner.class) cung cấp cầu nối giữa các tính năng kiểm tra Spring Boot và JUnit. Bất cứ khi nào chúng ta sử dụng bất kỳ tính năng kiểm tra Spring Boot nào trong các bài kiểm tra JUnit , chú thích này sẽ được yêu cầu.
+-@InjectMocks tạo một thể hiện của lớp và đưa các mô phỏng được tạo bằng chú thích @Mock vào thể hiện này
+-@Mock giúp là cách viết tắt của phương thức Mockito.mock () , giúp bạn bạn dễ dàng tìm thấy mô phỏng vấn đề trong trường hợp bị lỗi, vì tên của trường xuất hiện trong thông báo lỗi
+-MockMvc là một lớp công cụ kiểm tra Spring Boot cho phép bạn kiểm tra các test case mà không cần khởi động máy chủ HTTP
+-AutoCloseable là một interface đảm bảo rằng các tài nguyên được tự động giải phóng
 
-
-
-### Customization
-
-You can customize the appearance of your `Stats Card` or `Repo Card` however you wish with URL params.
-
-#### Common Options:
-
-- `title_color` - Card's title color _(hex color)_
-- `text_color` - Body text color _(hex color)_
-- `icon_color` - Icons color if available _(hex color)_
-- `border_color` - Card's border color _(hex color)_. (Does not apply when `hide_border` is enabled)
-- `bg_color` - Card's background color _(hex color)_ **or** a gradient in the form of _angle,start,end_
-- `hide_border` - Hides the card's border _(boolean)_
-- `theme` - name of the theme, choose from [all available themes](./themes/README.md)
-- `cache_seconds` - set the cache header manually _(min: 7200, max: 86400)_
-- `locale` - set the language in the card _(e.g. cn, de, es, etc.)_
-- `border_radius` - Corner rounding on the card
-
-> Note: The minimum of cache_seconds is currently 4 hours as a temporary fix for PATs exhaustion. 
-##### Gradient in bg_color
-
-You can provide multiple comma-separated values in the bg_color option to render a gradient, with the following format:
-
+> thực hiện cấu hình test
 ```
-&bg_color=DEG,COLOR1,COLOR2,COLOR3...COLOR10
+   @BeforeEach
+    public void setup() {
+        autoCloseable =  MockitoAnnotations.openMocks(this);
+        this.mvc = MockMvcBuilders.standaloneSetup(sinhVienController).build();
+    }
+    
+    @AfterEach
+    void tearDown() throws Exception {
+        autoCloseable.close();
+    }
 ```
 
-> Note on cache: Repo cards have a default cache of 4 hours (14400 seconds) if the fork count & star count is less than 1k, otherwise, it's 2 hours (7200 seconds). Also, note that the cache is clamped to a minimum of 2 hours and a maximum of 24 hours.
-#### Stats Card Exclusive Options:
+-@BeforeEach  thực thi trước mỗi lần gọi phương thức @Test
+-@AfterEach sẽ được thực thi sau mỗi  phương thức trong lớp hiện tại.@Test
+-MockitoAnnotations.openMocks(this) gọi yêu cầu Mockito quét cá thể lớp thử nghiệm này để tìm bất kỳ trường nào được chú thích bằng @Mockvà khởi tạo các trường đó dưới dạng mô phỏng
+-MockMvcBuilders.standaloneSetup() cho phép đăng ký một hoặc nhiều controller mà không cần sử dụng WebApplicationContext đầy đủ
 
-- `hide` - Hides the [specified items](#hiding-individual-stats) from stats _(Comma-separated values)_
-- `hide_title` - _(boolean)_
-- `hide_rank` - _(boolean)_ hides the rank and automatically resizes the card width
-- `show_icons` - _(boolean)_
-- `include_all_commits` - Count total commits instead of just the current year commits _(boolean)_
-- `count_private` - Count private commits _(boolean)_
-- `line_height` - Sets the line-height between text _(number)_
-- `custom_title` - Sets a custom title for the card
-- `disable_animations` - Disables all animations in the card _(boolean)_
+### 1 cung cấp danh sách sinh viên  sau đó trả lại Mảng Json
 
-#### Repo Card Exclusive Options:
-
-- `show_owner` - Show the repo's owner name _(boolean)_
-
-#### Language Card Exclusive Options:
-
-- `hide` - Hide the languages specified from the card _(Comma-separated values)_
-- `hide_title` - _(boolean)_
-- `layout` - Switch between two available layouts `default` & `compact`
-- `card_width` - Set the card's width manually _(number)_
-- `langs_count` - Show more languages on the card, between 1-10, defaults to 5 _(number)_
-- `exclude_repo` - Exclude specified repositories _(Comma-separated values)_
-- `custom_title` - Sets a custom title for the card
-
-> :warning: **Important:**
-> Language names should be uri-escaped, as specified in [Percent Encoding](https://en.wikipedia.org/wiki/Percent-encoding)
-> (i.e: `c++` should become `c%2B%2B`, `jupyter notebook` should become `jupyter%20notebook`, etc.) You can use
-> [urlencoder.org](https://www.urlencoder.org/) to help you do this automatically.
-#### Wakatime Card Exclusive Options:
-
-- `hide` - Hide the languages specified from the card _(Comma-separated values)_
-- `hide_title` - _(boolean)_
-- `line_height` - Sets the line-height between text _(number)_
-- `hide_progress` - Hides the progress bar and percentage _(boolean)_
-- `custom_title` - Sets a custom title for the card
-- `layout` - Switch between two available layouts `default` & `compact`
-- `langs_count` - Limit the number of languages on the card, defaults to all reported languages
-- `api_domain` - Set a custom API domain for the card, e.g. to use services like [Hakatime](https://github.com/mujx/hakatime) or [Wakapi](https://github.com/muety/wakapi)
-- `range` – Request a range different from your WakaTime default, e.g. `last_7_days`. See [WakaTime API docs](https://wakatime.com/developers#stats) for a list of available options.
-
----
-
-# GitHub Extra Pins
-
-GitHub extra pins allow you to pin more than 6 repositories in your profile using a GitHub readme profile.
-
-Yay! You are no longer limited to 6 pinned repositories.
-
-### Usage
-
-Copy-paste this code into your readme and change the links.
-
-Endpoint: `api/pin?username=anuraghazra&repo=github-readme-stats`
-
-```md
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats)](https://github.com/anuraghazra/github-readme-stats)
 ```
 
-### Demo
+@Test
+    void givenStudents_whenGetStudents_thenReturnJsonArray() throws Exception {
+        List<SinhVien> listSinhVien = new ArrayList<>(Arrays.asList(sinhVien));
+        Mockito.when(sinhVienService.getList()).thenReturn(listSinhVien);
 
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats)](https://github.com/anuraghazra/github-readme-stats)
+        mvc.perform(get("/list-sinh-vien")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.hasSize(1)))
+                .andExpect(jsonPath("$[0].name", is(sinhVien.getName())));
+    }
 
-Use [show_owner](#customization) variable to include the repo's owner username
+```
+-mvc.perform() trả về một kiểu cho phép xâu chuỗi các hành động tiếp theo, chẳng hạn như xác nhận các kỳ vọng, vào kết quả.
+-andExpect thực hiện các test case 
+-Lời gọi phương thức get (…) có thể được thay thế bằng các phương thức khác tương ứng với các động từ HTTP như put () , post () , v.v. Xin lưu ý rằng chúng tôi cũng đang đặt loại nội dung trong yêu cầu.
 
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats&show_owner=true)](https://github.com/anuraghazra/github-readme-stats)
+#### 2 thêm mới sinh viên 
 
-# Top Languages Card
 
-The top languages card shows a GitHub user's most frequently used top language.
+```
+ @Test
+    void whenPostStudents_thenCreateStudent() throws Exception {
+        SinhVien sinhVien1 = SinhVien.builder()
+                .id("A2")
+                .name("Le van b")
+                .email("b@gmail.com")
+                .build();
 
-_NOTE: Top Languages does not indicate my skill level or anything like that; it's a GitHub metric to determine which languages have the most code on GitHub. It's a new feature of github-readme-stats._
+        Mockito.when(sinhVienService.addNew(sinhVien1)).thenReturn(sinhVien1);
 
-### Usage
+        String content = objectWriter.writeValueAsString(sinhVien1);
 
-Copy-paste this code into your readme and change the links.
+        MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.post("/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
 
-Endpoint: `api/top-langs?username=anuraghazra`
+        mvc.perform(mockHttpServletRequestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.name", is("Le van b")));
+    }
+```
+-objectWriter.writeValueAsString chuyển đổi chuỗi về ía trị json
 
-```md
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra)](https://github.com/anuraghazra/github-readme-stats)
+#### test tìm kiếm sinh viên theo tên :
+
+```
+ @Test
+    void detailSinhVien() throws Exception {
+        Mockito.when(sinhVienService.findById(sinhVien.getId())).thenReturn(sinhVien);
+
+        mvc.perform(get("/A1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.name", is("Le Van A")));
+
+    }
+    
 ```
 
-### Exclude individual repositories
+#### test update sinh viên
 
-You can use `&exclude_repo=repo1,repo2` parameter to exclude individual repositories.
+```
+ @Test
+    void updateSinhVien() throws Exception {
+        SinhVien updateSinhVien = SinhVien.builder()
+                .id("A1")
+                .name("Le van b")
+                .email("b@gmail.com")
+                .build();
+        SinhVien editSinhVien = new SinhVien("A1","Le Van B", email);
+        Mockito.when(sinhVienService.update(editSinhVien.getId(), editSinhVien)).thenReturn(updateSinhVien);
+        String content = objectWriter.writeValueAsString(updateSinhVien);
 
-```md
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&exclude_repo=github-readme-stats,anuraghazra.github.io)](https://github.com/anuraghazra/github-readme-stats)
+        MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.put("/"+sinhVien.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+        mvc.perform(mockHttpServletRequestBuilder)
+                .andExpect(status().isOk());
+
+    }
+    
 ```
 
-### Hide individual languages
+# kết luận 
+Trong bài viết này, chúng ta đã học cách xây dựng UnitTest cơ bản với JUnit 
 
-You can use `&hide=language1,language2` parameter to hide individual languages.
-
-```md
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&hide=javascript,html)](https://github.com/anuraghazra/github-readme-stats)
-```
-
-### Show more languages
-
-You can use the `&langs_count=` option to increase or decrease the number of languages shown on the card. Valid values are integers between 1 and 10 (inclusive), and the default is 5.
-
-```md
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&langs_count=8)](https://github.com/anuraghazra/github-readme-stats)
-```
-
-### Compact Language Card Layout
-
-You can use the `&layout=compact` option to change the card design.
-
-```md
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&layout=compact)](https://github.com/anuraghazra/github-readme-stats)
-```
-
-### Demo
-
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra)](https://github.com/anuraghazra/github-readme-stats)
-
-- Compact layout
-
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&layout=compact)](https://github.com/anuraghazra/github-readme-stats)
-
-# Wakatime Week Stats
-
-Change the `?username=` value to your [Wakatime](https://wakatime.com) username.
-
-```md
-[![willianrod's wakatime stats](https://github-readme-stats.vercel.app/api/wakatime?username=willianrod)](https://github.com/anuraghazra/github-readme-stats)
-```
-
-> Note: Please be aware that we currently only show data from Wakatime profiles that are public.
-### Demo
-
-[![willianrod's wakatime stats](https://github-readme-stats.vercel.app/api/wakatime?username=willianrod)](https://github.com/anuraghazra/github-readme-stats)
-
-[![willianrod's wakatime stats](https://github-readme-stats.vercel.app/api/wakatime?username=willianrod&hide_progress=true)](https://github.com/anuraghazra/github-readme-stats)
-
-- Compact layout
-
-[![willianrod's wakatime stats](https://github-readme-stats.vercel.app/api/wakatime?username=willianrod&layout=compact)](https://github.com/anuraghazra/github-readme-stats)
-
----
-
-### All Demos
-
-- Default
-
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra)
-
-- Hiding specific stats
-
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&hide=contribs,issues)
-
-- Showing icons
-
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&hide=issues&show_icons=true)
-
-- Customize Border Color
-
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&border_color=2e4058)
-
-- Include All Commits
-
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&include_all_commits=true)
-
-- Themes
-
-Choose from any of the [default themes](#themes)
-
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&show_icons=true&theme=radical)
-
-- Gradient
-
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&bg_color=30,e96443,904e95&title_color=fff&text_color=fff)
-
-- Customizing stats card
-
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api/?username=anuraghazra&show_icons=true&title_color=fff&icon_color=79ff97&text_color=9f9f9f&bg_color=151515)
-
-- Setting card locale
-
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api/?username=anuraghazra&locale=es)
-
-- Customizing repo card
-
-![Customized Card](https://github-readme-stats.vercel.app/api/pin?username=anuraghazra&repo=github-readme-stats&title_color=fff&icon_color=f9f9f9&text_color=9f9f9f&bg_color=151515)
-
-- Top languages
-
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra)](https://github.com/anuraghazra/github-readme-stats)
-
-- Wakatime card
-
-[![willianrod's wakatime stats](https://github-readme-stats.vercel.app/api/wakatime?username=willianrod)](https://github.com/anuraghazra/github-readme-stats)
-
----
-
-### Quick Tip (Align The Repo Cards)
-
-You usually won't be able to layout the images side by side. To do that you can use this approach:
-
-```html
-<a href="https://github.com/anuraghazra/github-readme-stats">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats" />
-</a>
-<a href="https://github.com/anuraghazra/convoychat">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/pin/?username=anuraghazra&repo=convoychat" />
-</a>
-```
-
-## Deploy on your own Vercel instance
-
-#### [Check Out Step By Step Video Tutorial By @codeSTACKr](https://youtu.be/n6d4KHSKqGk?t=107)
-
-Since the GitHub API only allows 5k requests per hour, my `https://github-readme-stats.vercel.app/api` could possibly hit the rate limiter. If you host it on your own Vercel server, then you don't have to worry about anything. Click on the deploy button to get started!
-
-NOTE: Since [#58](https://github.com/anuraghazra/github-readme-stats/pull/58) we should be able to handle more than 5k requests and have no issues with downtime :D
-
-[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/anuraghazra/github-readme-stats)
-
-<details>
- <summary><b> Guide on setting up Vercel  🔨 </b></summary>
-
-1. Go to [vercel.com](https://vercel.com/)
-1. Click on `Log in`
-   ![](https://files.catbox.moe/tct1wg.png)
-1. Sign in with GitHub by pressing `Continue with GitHub`
-   ![](https://files.catbox.moe/btd78j.jpeg)
-1. Sign in to GitHub and allow access to all repositories, if prompted
-1. Fork this repo
-1. After forking the repo, open the [`vercel.json`](https://github.com/anuraghazra/github-readme-stats/blob/master/vercel.json#L5) file and change the `maxDuration` field to `10`
-1. Go back to your [Vercel dashboard](https://vercel.com/dashboard)
-1. Select `Import Project`
-   ![](https://files.catbox.moe/qckos0.png)
-1. Select `Import Git Repository`. Select root and keep everything as is.
-   ![](https://files.catbox.moe/pqub9q.png)
-1. Create a personal access token (PAT) [here](https://github.com/settings/tokens/new) and enable the `repo` permissions (this allows access to see private repo stats)
-1. Add the PAT as an environment variable named `PAT_1` (as shown).
-   ![](https://files.catbox.moe/0ez4g7.png)
-1. Click deploy, and you're good to go. See your domains to use the API!
-
-</details>
-
-## :sparkling_heart: Support the project
-
-I open-source almost everything I can, and I try to reply to everyone needing help using these projects. Obviously,
-this takes time. You can use this service for free.
-
-However, if you are using this project and are happy with it or just want to encourage me to continue creating stuff, there are a few ways you can do it:-
-
-- Giving proper credit when you use github-readme-stats on your readme, linking back to it :D
-- Starring and sharing the project :rocket:
-- [![paypal.me/anuraghazra](https://ionicabizau.github.io/badges/paypal.svg)](https://www.paypal.me/anuraghazra) - You can make one-time donations via PayPal. I'll probably buy a ~~coffee~~ tea. :tea:
-
-Thanks! :heart:
-
----
-
-[![https://vercel.com?utm_source=github_readme_stats_team&utm_campaign=oss](./powered-by-vercel.svg)](https://vercel.com?utm_source=github_readme_stats_team&utm_campaign=oss)
-
-
-Contributions are welcome! <3
-
-Made with :heart: and JavaScript
+tất cả các mẫu mã hiển thị trong bài viết đều có sẵn [trên github](https://github.com/thangdtph27626/unitTest.github.io)
