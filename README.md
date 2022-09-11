@@ -14,8 +14,9 @@ Kiểm thử đơn vị rất quan trọng vì các nhà phát triển phần m�
    </theader>
   <tbody>
   <td>
-   1:Kiểm thử đơn vị là gì?</br>
-   2:Thiết kế unit test?
+   1: Kiểm thử đơn vị là gì?</br>
+   2: Thiết kế unit test?</br>
+   3: Thiết lập dự án
    </td>
    
    </tbody>
@@ -33,13 +34,27 @@ Kiểm thử đơn vị rất quan trọng vì các nhà phát triển phần m�
 > 3.Kiểm tra sự hoạt động đúng đắn của các phương thức.\
 > 4.Dọn dẹp tài nguyên sau khi kết thúc kiểm tra.
 
-### Hiding individual stats
+# Thiết lập dự án
 
-To hide any specific stats, you can pass a query parameter `&hide=` with comma-separated values.
+## Maven Dependencies
 
-> Options: `&hide=stars,commits,prs,issues,contribs`
 ```md
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra&hide=contribs,prs)
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 ```
 
 ### Adding private contributions count to total commits count
