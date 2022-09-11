@@ -14,40 +14,24 @@ Kiểm thử đơn vị rất quan trọng vì các nhà phát triển phần m�
    </theader>
   <tbody>
   <td>
-   1:Kiểm thử đơn vị là gì?
+   1:Kiểm thử đơn vị là gì?</br>
+   2:Thiết kế unit test?
    </td>
+   
    </tbody>
    </table>
 </div>
 
-# Features
+# Kiểm thử đơn vị là gì?
 
-- [GitHub Stats Card](#github-stats-card)
-- [GitHub Extra Pins](#github-extra-pins)
-- [Top Languages Card](#top-languages-card)
-- [Wakatime Week Stats](#wakatime-week-stats)
-- [Themes](#themes)
-- [Customization](#customization)
-  - [Common Options](#common-options)
-  - [Stats Card Exclusive Options](#stats-card-exclusive-options)
-  - [Repo Card Exclusive Options](#repo-card-exclusive-options)
-  - [Language Card Exclusive Options](#language-card-exclusive-options)
-  - [Wakatime Card Exclusive Option](#wakatime-card-exclusive-options)
-- [Deploy Yourself](#deploy-on-your-own-vercel-instance)
+- là một loại kiểm thử phần mềm trong đó các đơn vị hoặc thành phần riêng lẻ của phần mềm được kiểm tra. Mục đích là để xác nhận rằng mỗi đơn vị của mã phần mềm hoạt động như mong đợi. Kiểm thử đơn vị được thực hiện trong quá trình phát triển (giai đoạn mã hóa) của một ứng dụng bởi các nhà phát triển. Unit Test tách một phần mã và xác minh tính đúng đắn của nó. Một đơn vị có thể là một chức năng, phương pháp, thủ tục, mô-đun hoặc đối tượng riêng lẻ.
 
-# GitHub Stats Card
+# Thiết kế unit test
 
-Copy-paste this into your markdown content, and that's it. Simple!
-
-Change the `?username=` value to your GitHub username.
-
-```md
-[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=anuraghazra)](https://github.com/anuraghazra/github-readme-stats)
-```
-
-_Note: Available ranks are S+ (top 1%), S (top 25%), A++ (top 45%), A+ (top 60%), and B+ (everyone).
-The values are calculated by using the [cumulative distribution function](https://en.wikipedia.org/wiki/Cumulative_distribution_function) using commits, contributions, issues, stars, pull requests, followers, and owned repositories.
-The implementation can be investigated at [src/calculateRank.js](./src/calculateRank.js)._
+> 1.Thiết lập các điều kiện cần thiết bao gồm khởi tạo các đối tượng, xác định tài nguyên cần thiết, xây dựng các dữ liệu giả.\
+> 2.Gọi các phương thức cần kiểm tra.\
+> 3.Kiểm tra sự hoạt động đúng đắn của các phương thức.\
+> 4.Dọn dẹp tài nguyên sau khi kết thúc kiểm tra.
 
 ### Hiding individual stats
 
