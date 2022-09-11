@@ -14,11 +14,11 @@ Kiểm thử đơn vị rất quan trọng vì các nhà phát triển phần m�
    </theader>
   <tbody>
   <td>
-   1: Kiểm thử đơn vị là gì?</br>
-   2: Thiết kế unit test?</br>
-   3: các test cơ bản?</br>
-   4: Thiết lập dự án</br>
-   5: kết luận 
+   <p>1: Kiểm thử đơn vị là gì?</p>
+   <p>2: Thiết kế unit test?</p>
+   <p>3: các test cơ bản?</p>
+   <p>4: Thiết lập dự án</p>
+   <p>5: kết luận 
    </td>
    
    </tbody>
