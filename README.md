@@ -3,6 +3,7 @@
  <h2 align="center">UnitTest cơ bản với JUnit</h2>
 </p>
 
+
 Kiểm thử đơn vị rất quan trọng vì các nhà phát triển phần mềm đôi khi cố gắng tiết kiệm thời gian thực hiện kiểm thử đơn vị tối thiểu và điều này là sai lầm vì kiểm thử đơn vị không phù hợp dẫn đến chi phí cao Sửa lỗi trong quá trình Kiểm tra hệ thống , Kiểm tra tích hợp và thậm chí là Kiểm thử Beta sau khi ứng dụng được xây dựng. Nếu thử nghiệm đơn vị thích hợp được thực hiện trong quá trình phát triển sớm, thì cuối cùng nó sẽ tiết kiệm thời gian và tiền bạc.
 
 <div align="center">
