@@ -93,7 +93,7 @@ xem thêm [tại đây](https://docs.spring.io/spring-framework/docs/current/jav
 
 ## Tạo lớp sinh viên
 
-```md
+```
 @Getter
 @Setter
 @AllArgsConstructor
@@ -109,12 +109,13 @@ public class SinhVien {
     private String email;
 
 }
-
 ```
+
 
 ##Service
 
 > service
+
 ```
 public interface SinhVienService {
 
