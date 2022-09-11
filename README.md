@@ -71,6 +71,7 @@ xem thêm [tại đây](https://docs.spring.io/spring-framework/docs/current/jav
 
 ## Maven Dependencies
 
+
 ```md
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -90,9 +91,11 @@ xem thêm [tại đây](https://docs.spring.io/spring-framework/docs/current/jav
         </dependency>
 ```
 
+
 ## Tạo lớp sinh viên
 
-```mdmd
+
+```md
 @Getter
 @Setter
 @AllArgsConstructor
@@ -111,11 +114,12 @@ public class SinhVien {
 ```
 
 
+
 ##Service
 
-> service
+1 service
 
-`mdmd
+```md
 public interface SinhVienService {
 
     List<SinhVien> getList();
@@ -132,7 +136,7 @@ public interface SinhVienService {
 ```
 
 
-> service  impl
+2 service  impl
 
 ```
 @Service
@@ -189,7 +193,9 @@ public class SinhVienSericeImpl implements SinhVienService{
 
 ```
 
+
 ## Controller
+
 
 ```md
 @RestController
@@ -235,6 +241,7 @@ public class sinhVienController {
 
 ## test 
 ## Khởi tạo các test case 
+
 
 ```
 @RunWith(MockitoJUnitRunner.class)
@@ -296,6 +303,7 @@ class sinhVienControllerTest {
     }
 }
 ```
+
 
 -@RunWith (SpringRunner.class) cung cấp cầu nối giữa các tính năng kiểm tra Spring Boot và JUnit. Bất cứ khi nào chúng ta sử dụng bất kỳ tính năng kiểm tra Spring Boot nào trong các bài kiểm tra JUnit , chú thích này sẽ được yêu cầu.
 -@InjectMocks tạo một thể hiện của lớp và đưa các mô phỏng được tạo bằng chú thích @Mock vào thể hiện này
