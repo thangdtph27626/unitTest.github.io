@@ -119,6 +119,7 @@ public class SinhVien {
 
 1 service
 
+
 ```md
 public interface SinhVienService {
 
@@ -135,10 +136,9 @@ public interface SinhVienService {
 
 ```
 
-
 2 service  impl
 
-```
+```md
 @Service
 public class SinhVienSericeImpl implements SinhVienService{
 
