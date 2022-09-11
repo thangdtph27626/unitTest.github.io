@@ -66,6 +66,10 @@ xem thêm [tại đây](https://docs.spring.io/spring-framework/docs/current/jav
 
 # Thiết lập dự án Sping boot
 
+## cấu trúc dự án 
+![image](https://user-images.githubusercontent.com/109157942/189532085-f6eaee4f-c9fa-4d6e-be93-89d50f150d64.png)
+
+
 ## Maven Dependencies
 
 ```md
